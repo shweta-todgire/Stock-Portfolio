@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => alert.style.display = 'none');
+            }, 2000);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Portfolio</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('add_stock') }}" method="post">
+            <input type="text" class="form-control" placeholder="Company Name" name="name" required>
+            <input type="number" class="form-control" placeholder="Number of Shares" name="shares" required>
+            <input type="number" step="0.01" class="form-control" placeholder="Purchase Price (₹)" name="purchase_price" required>
+            <button type="submit" class="btn">Add Stock</button>
+        </form>
+
+        <h2>Your Stocks</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Shares</th>
+                    <th>Purchase Price (₹)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in stocks %}
+                    <tr>
+                        <td>{{ stock.name }}</td>
+                        <td>{{ stock.shares }}</td>
+                        <td>₹{{ '{:.2f}'.format(stock.purchase_price) }}</td>
+                        <td>
+                            <a href="{{ url_for('delete_stock', id=stock.id) }}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br><br><br>
+        <div class="portfolio-summary">
+            <h3>Total Invested Value: ₹{{ '{:.2f}'.format(total_value) }}</h3>
+        </div>
+    </div>
+</body>
+</html>
