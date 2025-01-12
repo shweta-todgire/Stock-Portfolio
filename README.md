@@ -19,7 +19,5 @@ This is a Flask web application for managing your stock portfolio. You can add, 
 ## Project Structure
 
 - **app.py:** Main Flask application file which contains python script.
-
 - **templates/index.html:** HTML template for the chatbot interface.
-
 - **static/style.css:** CSS file for styling the chatbot interface.
